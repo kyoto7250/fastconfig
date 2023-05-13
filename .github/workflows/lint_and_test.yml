@@ -18,6 +18,8 @@ jobs:
         uses: abatilo/actions-poetry@v2
         with:
           poetry-version: "1.4.2"
+      - name: poetry install
+        run: poetry install
       - name: black
         run: poetry run black --check --verbose fastconfig/ tests/
       - name: ruff
