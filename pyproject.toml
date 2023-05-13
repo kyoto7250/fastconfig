@@ -10,7 +10,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-toml = "^0.10.2"
+toml = "^0.10.0"
 
 
 [tool.poetry.group.dev.dependencies]
