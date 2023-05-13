@@ -2,7 +2,7 @@
 name = "fastconfig"
 version = "0.1.0"
 description = "A lightweight way to find the project root and load config"
-authors = ["kyoto7250 kyoto7250@aol.com"]
+authors = ["kyoto7250 <kyoto7250@aol.com>"]
 license = "MIT"
 readme = "README.md"
 
