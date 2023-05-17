@@ -1,0 +1,14 @@
+{
+    "a": 0,
+    "b": "apple",
+    "e": "Any",
+    "numeric": 42,
+    "section": {
+        "dict": {
+            "numeric": {
+                "one": 1,
+                "zero": 0
+            }
+        }
+    }
+}

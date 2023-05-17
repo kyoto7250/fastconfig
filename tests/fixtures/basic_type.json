@@ -1,0 +1,17 @@
+{
+    "str": "str",
+    "flag": true,
+    "table": {
+        "first": "1",
+        "second": "2"
+    },
+    "section": {
+        "int": 42,
+        "list": {
+            "value": [1, 2, 3]
+        },
+        "date": {
+            "date": "1979-05-27"
+        }
+    }
+}
