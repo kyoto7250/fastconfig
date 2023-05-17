@@ -1,3 +1,4 @@
+import sys
 import unittest
 from dataclasses import MISSING, Field
 from typing import Any, Optional
@@ -40,7 +41,7 @@ class FieldBuilder:
 
     @classmethod
     def kwargs(cls) -> dict[str, Any]:
-        return {
+        options: dict[str, Any] = {
             "default": MISSING,
             "default_factory": MISSING,
             "init": True,
@@ -48,8 +49,11 @@ class FieldBuilder:
             "hash": None,
             "compare": True,
             "metadata": None,
-            "kw_only": MISSING,
         }
+
+        if sys.version_info >= (3, 10):
+            options["kw_only"] = MISSING
+        return options
 
 
 class TestValidator(unittest.TestCase):

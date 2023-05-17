@@ -4,7 +4,7 @@ from typing import Any
 
 from fastconfig.exception import InvalidConfigError
 
-if sys.version_info > (3, 11):
+if sys.version_info >= (3, 11):
     import tomllib
 else:
     import toml as tomllib
@@ -29,9 +29,16 @@ class FileLoader:
             raise InvalidConfigError(str(e))
 
     def load_toml(self, path: str) -> dict[str, Any]:
-        try:
-            with open(path, "r") as f:
-                config = tomllib.load(f)
-        except tomllib.decoder.TomlDecodeError as e:
-            raise InvalidConfigError(str(e))
+        if sys.version_info >= (3, 11):
+            try:
+                with open(path, "rb") as f:
+                    config = tomllib.load(f)
+            except tomllib.TOMLDecodeError as e:
+                raise InvalidConfigError(str(e))
+        else:
+            try:
+                with open(path, "r") as f:
+                    config = tomllib.load(f)
+            except tomllib.decoder.TomlDecodeError as e:
+                raise InvalidConfigError(str(e))
         return config

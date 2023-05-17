@@ -12,7 +12,7 @@ Numeric = Union[int, float]
 @dataclass
 class ComplexTypes:
     a: Union[int, float] = 0
-    b: Union[str, int | float] = 0
+    b: Union[str, Union[int, float]] = 0
     c: Optional[int] = field(default=None)
     d: dict[str, dict[str, int]] = field(default_factory=dict)
     e: Any = 0

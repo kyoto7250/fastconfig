@@ -9,7 +9,7 @@ DATE_TYPES = [datetime.datetime, datetime.date, datetime.time]
 
 class TypeChecker:
     def __call__(
-        self, key: str, value: Any, typeinfo: type | GenericAlias | _SpecialForm
+        self, key: str, value: Any, typeinfo: Union[type, GenericAlias, _SpecialForm]
     ) -> Any:
         self.value = value
         if not self.check(key, value, typeinfo):
@@ -19,7 +19,7 @@ class TypeChecker:
         return self.value
 
     def check(
-        self, key: str, value: Any, typeinfo: type | GenericAlias | _SpecialForm
+        self, key: str, value: Any, typeinfo: Union[type, GenericAlias, _SpecialForm]
     ) -> bool:
         if typeinfo == Any:
             return True
@@ -34,7 +34,7 @@ class TypeChecker:
         self,
         key: str,
         value: Any,
-        typeinfo: type | GenericAlias | _SpecialForm,
+        typeinfo: Union[type, GenericAlias, _SpecialForm],
     ) -> bool:
         outside = get_origin(typeinfo)
         types = get_args(typeinfo)
@@ -57,8 +57,10 @@ class TypeChecker:
 
     def check_datetime(
         self,
-        value: str | datetime.datetime | datetime.date | datetime.time,
-        typeinfo: Type[datetime.datetime] | Type[datetime.date] | Type[datetime.time],
+        value: Union[str, datetime.datetime, datetime.date, datetime.time],
+        typeinfo: Union[
+            Type[datetime.datetime], Type[datetime.date], Type[datetime.time]
+        ],
     ) -> Any:
         if type(value) is typeinfo:
             return True

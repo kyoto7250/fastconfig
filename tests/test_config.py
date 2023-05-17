@@ -32,7 +32,7 @@ Numeric = Union[int, float]
 @dataclass
 class ComplexTypes(FastConfig):
     a: Union[int, float] = 0
-    b: Union[str, int | float] = 0
+    b: Union[str, Union[int, float]] = 0
     c: Optional[int] = field(
         default=None, metadata=Metadata({"section": ["section", "optional_int"]})
     )

@@ -2,7 +2,7 @@ import os
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Callable, List, Mapping, Set, Type, TypedDict, TypeVar
+from typing import Any, Callable, List, Mapping, Set, Type, TypedDict, TypeVar, Union
 
 from fastconfig.exception import InvalidConfigError
 from fastconfig.internals.loader import FileLoader
@@ -17,7 +17,6 @@ class FastConfig:
 
 X = TypeVar("X", bound=FastConfig)
 
-# 以下の場合には別のクラスを用意してあげるべきかも
 if sys.version_info > (3, 11):
     from typing import NotRequired, Required
 
@@ -53,7 +52,7 @@ else:
 
 class ConfigBuilder:
     @classmethod
-    def build(cls, path: str | Path, config: X | Type[X]) -> X:
+    def build(cls, path: Union[str, Path], config: Union[X, Type[X]]) -> X:
         if isinstance(path, Path):
             path = str(path)
 

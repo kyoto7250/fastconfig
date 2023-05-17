@@ -1,11 +1,11 @@
 from dataclasses import MISSING, Field
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from fastconfig.exception import MissingRequiredElementError, UnexpectedValueError
 from fastconfig.internals.type_checker import TypeChecker
 
 
-def extract(setting: dict[str, Any], section: str | list[str]) -> Optional[Any]:
+def extract(setting: dict[str, Any], section: Union[str, list[str]]) -> Optional[Any]:
     if isinstance(section, str) and section in setting:
         return setting[section]
     elif isinstance(section, list):
