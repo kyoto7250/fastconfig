@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastconfig"
-version = "0.1.0"
+version = "0.1.1"
 description = "A lightweight way to find the project root and load config"
 authors = ["kyoto7250 <kyoto7250@aol.com>"]
 homepage = "https://github.com/kyoto7250"
