@@ -10,7 +10,8 @@ from fastconfig.exception import InvalidConfigError
 @dataclass
 class BasicTypes(FastConfig):
     a: dict[str, str] = field(
-        default_factory=dict, metadata=Metadata({"section": ["table"]})
+        default_factory=dict,
+        metadata=Metadata({"section": ["table"]}),
     )
     b: bool = field(default=False, metadata=Metadata({"section": ["flag"]}))
     c: int = field(default=0, metadata=Metadata({"section": ["section", "int"]}))
