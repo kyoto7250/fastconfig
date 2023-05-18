@@ -45,22 +45,18 @@ numeric = 24
 
 ```python
 import fastconfig
-from fastconfig.config import FastConfig, ConfigBuilder, Metadata
+from fastconfig.config import FastConfig, ConfigBuilder, fc_field
 from fastconfig.exception import FastConfigError
 from dataclasses import field, dataclass
 
 
 @dataclass
 class Config(FastConfig):
-    result: int = field(
-        default=-1, metadata=Metadata({"section": ["section", "numeric"]})
-    )
+    result: int = fc_field(key="numeric", default=-1)
     # If metadata does not exist, it is searched by variable name
-    setting_path: str = field(default="default")
+    setting_path: str = fc_field(default="default")
     # Type checking is done based on the type of dataclass. Type checking is recursive.
-    dic: dict[str, int] = field(
-        default_factory=dict, metadata=Metadata({"section": "section"})
-    )
+    dic: dict[str, int] = fc_field(key="section", default_factory=dict)
 
 
 if path := fastconfig.search("example.json"):

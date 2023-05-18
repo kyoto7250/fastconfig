@@ -1,7 +1,7 @@
 from dataclasses import MISSING, Field
 from typing import Any, Optional, Union
 
-from fastconfig.exception import MissingRequiredElementError, UnexpectedValueError
+from fastconfig.exception import MissingRequiredElementError
 from fastconfig.internals.type_checker import TypeChecker
 
 
@@ -32,8 +32,11 @@ class Validator:
 
     def __call__(self, key: str, f: Field, build: bool = True) -> Any:
         metadata: dict[str, Any] = dict(f.metadata) if hasattr(f, "metadata") else {}
-        section: str = metadata["section"] if "section" in metadata else key
-        value: Any = extract(self.setting, section)
+        separator = metadata["separator"] if "separator" in metadata else "."
+        setting_key: str = (
+            metadata["key"].split(separator) if "key" in metadata else key
+        )
+        value: Any = extract(self.setting, setting_key)
 
         if value is None:
             if (
@@ -46,12 +49,4 @@ class Validator:
             return DEFAULT_VALUE()
 
         value = self.checker(key, value, f.type)
-        if "choice" in metadata and value not in metadata["choice"]:
-            raise UnexpectedValueError(
-                f"{key}: {value} is not valid. must be selected in {metadata['choice']}"
-            )
-
-        if "validate" in metadata and metadata["validate"](value):
-            # TODO: think error message
-            raise UnexpectedValueError
         return value

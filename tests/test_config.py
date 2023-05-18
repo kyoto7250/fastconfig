@@ -1,29 +1,26 @@
 import unittest
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import date
 from typing import Any, List, Optional, Union
 
-from fastconfig.config import ConfigBuilder, FastConfig, Metadata
+from fastconfig.config import ConfigBuilder, FastConfig, fc_field
 from fastconfig.exception import InvalidConfigError
 
 
 @dataclass
 class BasicTypes(FastConfig):
-    a: dict[str, str] = field(
-        default_factory=dict,
-        metadata=Metadata({"section": ["table"]}),
-    )
-    b: bool = field(default=False, metadata=Metadata({"section": ["flag"]}))
-    c: int = field(default=0, metadata=Metadata({"section": ["section", "int"]}))
-    d: str = field(default="default", metadata=Metadata({"section": "str"}))
-    e: List[int] = field(
+    a: dict[str, str] = fc_field(key="table", default_factory=dict)
+    b: bool = fc_field(key="flag", default=False)
+    c: int = fc_field(key="section.int", default=0)
+    d: str = fc_field(key="str", default="default")
+    e: List[int] = fc_field(
+        key="section.list.value",
         default_factory=list,
-        metadata=Metadata({"section": ["section", "list", "value"]}),
     )
-    f: float = field(default=0)
-    g: date = field(
+    f: float = fc_field(default=0)
+    g: date = fc_field(
+        key="section.date.date",
         default=date(2000, 1, 1),
-        metadata=Metadata({"section": ["section", "date", "date"]}),
     )
 
 
@@ -34,14 +31,13 @@ Numeric = Union[int, float]
 class ComplexTypes(FastConfig):
     a: Union[int, float] = 0
     b: Union[str, Union[int, float]] = 0
-    c: Optional[int] = field(
-        default=None, metadata=Metadata({"section": ["section", "optional_int"]})
-    )
-    d: dict[str, dict[str, int]] = field(
-        default_factory=dict, metadata=Metadata({"section": ["section", "dict"]})
+    c: Optional[int] = fc_field(key="section.optional_int", default=None)
+    d: dict[str, dict[str, int]] = fc_field(
+        key="section.dict",
+        default_factory=dict,
     )
     e: Any = 0
-    f: Numeric = field(default=0, metadata=Metadata({"section": ["numeric"]}))
+    f: Numeric = fc_field(key="numeric", default=0)
 
 
 class TestFastConfig(unittest.TestCase):
