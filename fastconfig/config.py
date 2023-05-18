@@ -27,7 +27,7 @@ if sys.version_info >= (3, 10):
         default_factory: Type[T] = MISSING,
         init: bool = True,
         repr: bool = True,
-        hash: bool | None = None,
+        hash: Optional[bool] = None,
         compare: bool = True,
         metadata: Mapping[Any, Any] | None = None,
         kw_only=MISSING,
@@ -51,15 +51,15 @@ if sys.version_info >= (3, 10):
 else:
 
     def fc_field(
-        key: Optional[str | int] = None,
+        key: Optional[Union[str, int]] = None,
         separator: str = ".",
         default: T = MISSING,
         default_factory: Type[T] = MISSING,
         init: bool = True,
         repr: bool = True,
-        hash: bool | None = None,
+        hash: Optional[bool] = None,
         compare: bool = True,
-        metadata: Mapping[Any, Any] | None = None,
+        metadata: Optional[Mapping[Any, Any]] = None,
     ) -> T:
         options: dict[str, Any] = {
             "default": default,
