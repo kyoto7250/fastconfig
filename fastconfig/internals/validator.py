@@ -32,8 +32,11 @@ class Validator:
 
     def __call__(self, key: str, f: Field, build: bool = True) -> Any:
         metadata: dict[str, Any] = dict(f.metadata) if hasattr(f, "metadata") else {}
-        section: str = metadata["section"] if "section" in metadata else key
-        value: Any = extract(self.setting, section)
+        separator = metadata["separator"] if "separator" in metadata else "."
+        setting_key: str = (
+            metadata["key"].split(separator) if "key" in metadata else key
+        )
+        value: Any = extract(self.setting, setting_key)
 
         if value is None:
             if (

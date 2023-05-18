@@ -64,7 +64,7 @@ class TestValidator(unittest.TestCase):
         self.assertEqual(
             validator(
                 "int",
-                FieldBuilder.build(default=0, ty=int, metadata={"section": "int"}),
+                FieldBuilder.build(default=0, ty=int, metadata={"key": "int"}),
             ),
             42,
         )
@@ -72,9 +72,7 @@ class TestValidator(unittest.TestCase):
         self.assertIsInstance(
             validator(
                 "int",
-                FieldBuilder.build(
-                    default=0, ty=int, metadata={"section": "not exist"}
-                ),
+                FieldBuilder.build(default=0, ty=int, metadata={"key": "not exist"}),
             ),
             DEFAULT_VALUE,
         )
@@ -84,7 +82,7 @@ class TestValidator(unittest.TestCase):
             validator(
                 "int",
                 FieldBuilder.build(
-                    default=0, ty=int, metadata={"section": "int", "choice": [42]}
+                    default=0, ty=int, metadata={"key": "int", "choice": [42]}
                 ),
             ),
             42,
@@ -94,7 +92,7 @@ class TestValidator(unittest.TestCase):
             validator(
                 "int",
                 FieldBuilder.build(
-                    default=0, ty=int, metadata={"section": "int", "choice": [1, 2, 3]}
+                    default=0, ty=int, metadata={"key": "int", "choice": [1, 2, 3]}
                 ),
             )
         self.assertEqual(
@@ -106,7 +104,7 @@ class TestValidator(unittest.TestCase):
             validator(
                 "int",
                 FieldBuilder.build(
-                    default=MISSING, ty=int, metadata={"section": "not exist"}
+                    default=MISSING, ty=int, metadata={"key": "not exist"}
                 ),
             )
         self.assertEqual(
@@ -117,7 +115,7 @@ class TestValidator(unittest.TestCase):
         with self.assertRaises(UnexpectedValueError) as ue:
             validator(
                 "int",
-                FieldBuilder.build(default=0, ty=int, metadata={"section": "not_int"}),
+                FieldBuilder.build(default=0, ty=int, metadata={"key": "not_int"}),
             )
 
         self.assertEqual(
