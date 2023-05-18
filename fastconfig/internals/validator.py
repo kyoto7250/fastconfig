@@ -1,7 +1,7 @@
 from dataclasses import MISSING, Field
 from typing import Any, Optional, Union
 
-from fastconfig.exception import MissingRequiredElementError, UnexpectedValueError
+from fastconfig.exception import MissingRequiredElementError
 from fastconfig.internals.type_checker import TypeChecker
 
 
