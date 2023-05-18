@@ -49,12 +49,4 @@ class Validator:
             return DEFAULT_VALUE()
 
         value = self.checker(key, value, f.type)
-        if "choice" in metadata and value not in metadata["choice"]:
-            raise UnexpectedValueError(
-                f"{key}: {value} is not valid. must be selected in {metadata['choice']}"
-            )
-
-        if "validate" in metadata and metadata["validate"](value):
-            # TODO: think error message
-            raise UnexpectedValueError
         return value

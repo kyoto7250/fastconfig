@@ -77,28 +77,6 @@ class TestValidator(unittest.TestCase):
             DEFAULT_VALUE,
         )
 
-        # choice
-        self.assertEqual(
-            validator(
-                "int",
-                FieldBuilder.build(
-                    default=0, ty=int, metadata={"key": "int", "choice": [42]}
-                ),
-            ),
-            42,
-        )
-
-        with self.assertRaises(UnexpectedValueError) as ue:
-            validator(
-                "int",
-                FieldBuilder.build(
-                    default=0, ty=int, metadata={"key": "int", "choice": [1, 2, 3]}
-                ),
-            )
-        self.assertEqual(
-            str(ue.exception), "int: 42 is not valid. must be selected in [1, 2, 3]"
-        )
-
         # no default
         with self.assertRaises(MissingRequiredElementError) as me:
             validator(
