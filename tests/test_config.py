@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Any, List, Optional, Union
 
-from fastconfig.config import ConfigBuilder, FastConfig, fc_field
+from fastconfig.config import FastConfig, fc_field
 from fastconfig.exception import InvalidConfigError
 
 
@@ -64,13 +64,9 @@ class TestFastConfig(unittest.TestCase):
             },
         )
 
-
-class TestConfigBuilder(unittest.TestCase):
     def test_toml_build(self) -> None:
         # basic types
-        basic_config: BasicTypes = ConfigBuilder.build(
-            "tests/fixtures/basic_type.toml", BasicTypes
-        )
+        basic_config: BasicTypes = BasicTypes.build("tests/fixtures/basic_type.toml")
         self.assertEqual(
             basic_config,
             BasicTypes(
@@ -85,8 +81,8 @@ class TestConfigBuilder(unittest.TestCase):
         )
 
         # complex types
-        complex_config: ComplexTypes = ConfigBuilder.build(
-            "tests/fixtures/complex_type.toml", ComplexTypes
+        complex_config: ComplexTypes = ComplexTypes.build(
+            "tests/fixtures/complex_type.toml"
         )
 
         self.assertEqual(
@@ -103,18 +99,20 @@ class TestConfigBuilder(unittest.TestCase):
 
         # open not found file
         with self.assertRaises(FileNotFoundError) as fe:
-            ConfigBuilder.build("not_exist.txt", BasicTypes)
+            BasicTypes.build("not_exist.txt")
         self.assertEqual(str(fe.exception), "not_exist.txt is not found")
 
         # invalid class
         with self.assertRaises(InvalidConfigError) as ic:
-            ConfigBuilder.build("tests/fixtures/basic_type.toml", int)  # type: ignore
+            BasicTypes.build("tests/fixtures/basic_type.toml", int)  # type: ignore
         self.assertEqual(
             str(ic.exception), "must be of type FastConfig or an instance of FastConfig"
         )
 
     def test_toml_update(self) -> None:
-        config = ConfigBuilder.build("tests/fixtures/basic_type.toml", BasicTypes())
+        config: BasicTypes = BasicTypes.build(
+            "tests/fixtures/basic_type.toml", BasicTypes()
+        )
         self.assertEqual(
             config,
             BasicTypes(
@@ -129,7 +127,7 @@ class TestConfigBuilder(unittest.TestCase):
         )
 
         # complex types
-        complex_config: ComplexTypes = ConfigBuilder.build(
+        complex_config: ComplexTypes = ComplexTypes.build(
             "tests/fixtures/complex_type.toml", ComplexTypes()
         )
 
@@ -146,9 +144,7 @@ class TestConfigBuilder(unittest.TestCase):
         )
 
     def test_json_build(self) -> None:
-        config: BasicTypes = ConfigBuilder.build(
-            "tests/fixtures/basic_type.json", BasicTypes
-        )
+        config: BasicTypes = BasicTypes.build("tests/fixtures/basic_type.json")
         self.assertEqual(
             config,
             BasicTypes(
@@ -162,8 +158,8 @@ class TestConfigBuilder(unittest.TestCase):
             ),
         )
 
-        complex_config: ComplexTypes = ConfigBuilder.build(
-            "tests/fixtures/complex_type.json", ComplexTypes
+        complex_config: ComplexTypes = ComplexTypes.build(
+            "tests/fixtures/complex_type.json"
         )
 
         self.assertEqual(
@@ -179,8 +175,7 @@ class TestConfigBuilder(unittest.TestCase):
         )
 
     def test_json_update(self) -> None:
-        builder = ConfigBuilder()
-        config: BasicTypes = builder.build(
+        config: BasicTypes = BasicTypes.build(
             "tests/fixtures/basic_type.json", BasicTypes()
         )
         self.assertEqual(
@@ -196,7 +191,7 @@ class TestConfigBuilder(unittest.TestCase):
             ),
         )
 
-        complex_config: ComplexTypes = ConfigBuilder.build(
+        complex_config: ComplexTypes = ComplexTypes.build(
             "tests/fixtures/complex_type.json", ComplexTypes()
         )
 

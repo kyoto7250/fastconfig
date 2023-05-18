@@ -8,30 +8,39 @@ from fastconfig.exception import InvalidConfigError
 from fastconfig.internals.loader import FileLoader
 from fastconfig.internals.validator import DEFAULT_VALUE, Validator
 
+_T = TypeVar("_T")
+_Self = TypeVar("_Self", bound="FastConfig")
+
 
 @dataclass
 class FastConfig:
+    @classmethod
+    def build(
+        cls: Type[_Self], path: Union[str, Path], config: Optional[_Self] = None
+    ) -> _Self:
+        if config is None:
+            return _FastConfigBuilder.build(path, cls)
+        else:
+            return _FastConfigBuilder.build(path, config)
+
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
-
-X = TypeVar("X", bound=FastConfig)
-T = TypeVar("T")
 
 if sys.version_info >= (3, 10):
 
     def fc_field(
         key: Optional[str | int] = None,
         separator: str = ".",
-        default: T = MISSING,
-        default_factory: Type[T] = MISSING,
+        default: _T = MISSING,
+        default_factory: Type[_T] = MISSING,
         init: bool = True,
         repr: bool = True,
         hash: Optional[bool] = None,
         compare: bool = True,
         metadata: Mapping[Any, Any] | None = None,
         kw_only=MISSING,
-    ) -> T:
+    ) -> _T:
         options: dict[str, Any] = {
             "default": default,
             "default_factory": default_factory,
@@ -53,14 +62,14 @@ else:
     def fc_field(
         key: Optional[Union[str, int]] = None,
         separator: str = ".",
-        default: T = MISSING,
-        default_factory: Type[T] = MISSING,
+        default: _T = MISSING,
+        default_factory: Type[_T] = MISSING,
         init: bool = True,
         repr: bool = True,
         hash: Optional[bool] = None,
         compare: bool = True,
         metadata: Optional[Mapping[Any, Any]] = None,
-    ) -> T:
+    ) -> _T:
         options: dict[str, Any] = {
             "default": default,
             "default_factory": default_factory,
@@ -77,9 +86,9 @@ else:
         return field(**options)
 
 
-class ConfigBuilder:
+class _FastConfigBuilder:
     @classmethod
-    def build(cls, path: Union[str, Path], config: Union[X, Type[X]]) -> X:
+    def build(cls, path: Union[str, Path], config: Union[_Self, Type[_Self]]) -> _Self:
         if isinstance(path, Path):
             path = str(path)
 
@@ -89,20 +98,20 @@ class ConfigBuilder:
         loader: FileLoader = FileLoader()
         data: dict[str, Any] = loader(path)
         if not isinstance(config, type) and isinstance(config, FastConfig):
-            return cls.update(config, data)
+            return cls.__update(config, data)
         elif isinstance(config, type) and issubclass(config, FastConfig):
-            return cls.make(config, data)
+            return cls.__make(config, data)
         else:
             raise InvalidConfigError(
                 "must be of type FastConfig or an instance of FastConfig"
             )
 
     @classmethod
-    def make(
+    def __make(
         cls,
-        config: Type[X],
+        config: Type[_Self],
         setting: dict[str, Any],
-    ) -> X:
+    ) -> _Self:
         # check metadata and type hint
         args: dict[str, Any] = {}
         checker: Validator = Validator(setting)
@@ -113,7 +122,7 @@ class ConfigBuilder:
         return config(**args)
 
     @classmethod
-    def update(cls, config: X, setting: dict[str, Any]) -> X:
+    def __update(cls, config: _Self, setting: dict[str, Any]) -> _Self:
         checker: Validator = Validator(setting)
         for key, f in config.__dataclass_fields__.items():
             value = checker(key, f, build=False)

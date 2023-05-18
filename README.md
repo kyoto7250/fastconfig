@@ -14,7 +14,6 @@ This library provides two functionalities:
     - `fastconfig.search`
 * A function to directly build a class from a configuration file.
     - `fastconfig.config.FastConfig`
-    - `fastconfig.config.ConfigBuilder`
 
 
 ## Install
@@ -45,14 +44,14 @@ numeric = 24
 
 ```python
 import fastconfig
-from fastconfig.config import FastConfig, ConfigBuilder, fc_field
+from fastconfig.config import FastConfig, fc_field
 from fastconfig.exception import FastConfigError
 from dataclasses import field, dataclass
 
 
 @dataclass
 class Config(FastConfig):
-    result: int = fc_field(key="numeric", default=-1)
+    result: int = fc_field(key="section.numeric", default=-1)
     # If metadata does not exist, it is searched by variable name
     setting_path: str = fc_field(default="default")
     # Type checking is done based on the type of dataclass. Type checking is recursive.
@@ -62,7 +61,7 @@ class Config(FastConfig):
 if path := fastconfig.search("example.json"):
     try:
         # build instance
-        config = ConfigBuilder.build(path, Config)
+        config = Config.build(path)
         assert config == Config(
             result=42, setting_path="setting_path", dic={"numeric": 42}
         )
@@ -73,7 +72,7 @@ else:
 
 if other_path := fastconfig.search("other.toml"):
     # can update config
-    config = ConfigBuilder.build(other_path, config)
+    config = Config.build(other_path, config)
     assert config == Config(result=24, setting_path="setting_path", dic={"numeric": 24})
 ```
 
