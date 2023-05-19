@@ -23,8 +23,26 @@ class FastConfig:
         else:
             return _FastConfigBuilder.build(path, config)
 
-    def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+    def to_dict(self, use_key: bool = False) -> dict[str, Any]:
+        if use_key:
+            return asdict(self)
+
+        dic: dict[str, Any] = {}
+        for key, f in self.__dataclass_fields__.items():
+            metadata: dict[str, Any] = (
+                dict(f.metadata) if hasattr(f, "metadata") else {}
+            )
+            separator = metadata["separator"] if "separator" in metadata else "."
+            setting_key: list[str] = (
+                metadata["key"].split(separator) if "key" in metadata else [key]
+            )
+            inside: dict[str, Any] = dic
+            for nest_field in setting_key[:-1]:
+                if nest_field not in dic:
+                    inside[nest_field] = {}
+                inside = inside[nest_field]
+            inside[setting_key[-1]] = getattr(self, key)
+        return dic
 
 
 if sys.version_info >= (3, 10):
@@ -98,16 +116,16 @@ class _FastConfigBuilder:
         loader: FileLoader = FileLoader()
         data: dict[str, Any] = loader(path)
         if not isinstance(config, type) and isinstance(config, FastConfig):
-            return cls.__update(config, data)
+            return cls._update(config, data)
         elif isinstance(config, type) and issubclass(config, FastConfig):
-            return cls.__make(config, data)
+            return cls._make(config, data)
         else:
             raise InvalidConfigError(
                 "must be of type FastConfig or an instance of FastConfig"
             )
 
     @classmethod
-    def __make(
+    def _make(
         cls,
         config: Type[_Self],
         setting: dict[str, Any],
@@ -122,7 +140,7 @@ class _FastConfigBuilder:
         return config(**args)
 
     @classmethod
-    def __update(cls, config: _Self, setting: dict[str, Any]) -> _Self:
+    def _update(cls, config: _Self, setting: dict[str, Any]) -> _Self:
         checker: Validator = Validator(setting)
         for key, f in config.__dataclass_fields__.items():
             value = checker(key, f, build=False)

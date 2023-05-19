@@ -1,13 +1,9 @@
 import json
-import sys
 from typing import Any
 
-from fastconfig.exception import InvalidConfigError
+import toml
 
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    import toml as tomllib
+from fastconfig.exception import InvalidConfigError
 
 
 class FileLoader:
@@ -29,16 +25,9 @@ class FileLoader:
             raise InvalidConfigError(str(e))
 
     def load_toml(self, path: str) -> dict[str, Any]:
-        if sys.version_info >= (3, 11):
-            try:
-                with open(path, "rb") as f:
-                    config = tomllib.load(f)
-            except tomllib.TOMLDecodeError as e:
-                raise InvalidConfigError(str(e))
-        else:
-            try:
-                with open(path, "r") as f:
-                    config = tomllib.load(f)
-            except tomllib.decoder.TomlDecodeError as e:
-                raise InvalidConfigError(str(e))
+        try:
+            with open(path, "r") as f:
+                config = toml.load(f)
+        except toml.decoder.TomlDecodeError as e:
+            raise InvalidConfigError(str(e))
         return config
