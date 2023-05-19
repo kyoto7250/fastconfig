@@ -31,12 +31,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.4.2"
+      - name: poetry install
+        run: poetry install
+      - name: build mkdocs
+        run: poetry run mkdocs build
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: 'site/'
+          path: "site/"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
