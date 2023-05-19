@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from typing import List, Optional, Union
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 PROJECT_ROOTS: List[str] = [".hg", ".git"]
 DEPTH: int = 10
 
