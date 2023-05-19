@@ -1,0 +1,23 @@
+site_name: "FastConfig"
+
+nav:
+  - Home: "index.md"
+  - Modules: "modules.md"
+
+theme:
+  name: "material"
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+

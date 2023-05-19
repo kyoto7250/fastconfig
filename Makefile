@@ -6,3 +6,9 @@ style:
 
 test:
 	poetry run  pytest --cov=fastconfig --cov-report=html
+
+serve:
+	poetry run mkdocs serve
+
+build:
+	poetry run mkdocs build
