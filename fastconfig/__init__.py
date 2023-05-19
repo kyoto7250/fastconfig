@@ -15,7 +15,8 @@ def is_project_root(path: Union[str, Path]) -> bool:
     This method determines the project root by whether the version control tool directory exists.
 
     Args:
-        path (Union[str, Path]): The path to check whether it is the project root or not
+        path (Union[str, Path]):
+            The path to check whether it is the project root or not
 
     Returns:
         bool: The result of the project root or not
@@ -37,7 +38,8 @@ def find_project_root(path: Optional[Union[str, Path]] = None) -> Optional[Path]
     Return if the project root is found, or None if not.
 
     Args:
-        path (Optional[Union[str, Path]]): A path string or Path object to start searching, If nothing is passed, start in the current directory
+        path (Optional[Union[str, Path]]):
+            A path string or Path object to start searching, If nothing is passed, start in the current directory
 
     Returns:
         Optional[Path]: the project root path, or None if the project root is not found
@@ -71,9 +73,14 @@ def search(
     Recursively searches for files with the name of the target and returns the result.
 
     Args:
-        target (Union[str, Path]): Search target filename, and directory names are ignored
-        path (Optional[Union[str, Path]]): A path string or Path object to start searching, If nothing is passed, start in the current directory
-        end_up_the_project_root (bool): Whether or not to search the directory where the version control tool exists
+        target (Union[str, Path]):
+            Search target filename, and directory names are ignored.
+
+        path (Optional[Union[str, Path]]):
+            A path string or Path object to start searching, If nothing is passed, start in the current directory.
+
+        end_up_the_project_root (bool):
+            Whether or not to search the directory where the version control tool exists
 
     Returns:
         Optional[Path]: a path of the target file, or None if the target file is not found

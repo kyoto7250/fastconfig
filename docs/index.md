@@ -1,5 +1,6 @@
-# fastconfig
+# FastConfig
 A lightweight way to find the project root and load config in python3.
+
 current support is [`3.9`, `3.10`, `3.11`].
 
 This library provides two functionalities:
@@ -10,8 +11,8 @@ This library provides two functionalities:
     - `fastconfig.search`
 * A function to directly build a class from a configuration file.
     - `fastconfig.config.FastConfig`
-      * `build`
-      * `to_dict`
+        * `build()`
+        * `to_dict()`
 
 
 ## Install
