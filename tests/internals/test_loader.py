@@ -1,12 +1,12 @@
 import unittest
 
 from fastconfig.exception import InvalidConfigError
-from fastconfig.internals.loader import FileLoader
+from fastconfig.internals.loader import _FileLoader
 
 
 class TestLoader(unittest.TestCase):
     def test_call(self) -> None:
-        loader = FileLoader()
+        loader = _FileLoader()
         with self.assertRaises(InvalidConfigError) as je:
             loader("tests/fixtures/internals/invalid.json")
 

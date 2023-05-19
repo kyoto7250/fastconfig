@@ -1,3 +1,4 @@
+"""This package provides the methods to search files."""
 import os
 from pathlib import Path
 from typing import List, Optional, Union
@@ -10,6 +11,7 @@ DEPTH: int = 10
 def is_project_root(path: Union[str, Path]) -> bool:
     """
     Check the given path is the project root directory or not.
+
     This method determines the project root by whether the version control tool directory exists.
 
     Args:
@@ -32,7 +34,7 @@ def is_project_root(path: Union[str, Path]) -> bool:
 
 def find_project_root(path: Optional[Union[str, Path]] = None) -> Optional[Path]:
     """
-    Return if the project root is found, or None if not
+    Return if the project root is found, or None if not.
 
     Args:
         path (Optional[Union[str, Path]]): A path string or Path object to start searching, If nothing is passed, start in the current directory
@@ -66,7 +68,7 @@ def search(
     end_up_the_project_root: bool = True,
 ) -> Optional[Path]:
     """
-    Recursively searches for files with the name of the target and returns the result
+    Recursively searches for files with the name of the target and returns the result.
 
     Args:
         target (Union[str, Path]): Search target filename, and directory names are ignored

@@ -4,27 +4,27 @@ from dataclasses import MISSING, Field
 from typing import Any, Optional
 
 from fastconfig.exception import MissingRequiredElementError, UnexpectedValueError
-from fastconfig.internals.validator import DEFAULT_VALUE, Validator, extract
+from fastconfig.internals.validator import DEFAULT_VALUE, _extract, _Validator
 
 
-class TestExtract(unittest.TestCase):
-    def test__extract(self) -> None:
+class Test_extract(unittest.TestCase):
+    def test___extract(self) -> None:
         dic: dict[str, Any] = {
             "value": 1,
             "internal": {"value": 2, "internal": {"value": 3}},
         }
 
-        self.assertEqual(extract(dic, "value"), 1)
-        self.assertIsNone(extract(dic, "val"))
-        self.assertEqual(extract(dic, ["value"]), 1)
-        self.assertIsNone(extract(dic, ["val"]))
+        self.assertEqual(_extract(dic, "value"), 1)
+        self.assertIsNone(_extract(dic, "val"))
+        self.assertEqual(_extract(dic, ["value"]), 1)
+        self.assertIsNone(_extract(dic, ["val"]))
         self.assertEqual(
-            extract(dic, ["internal"]), {"value": 2, "internal": {"value": 3}}
+            _extract(dic, ["internal"]), {"value": 2, "internal": {"value": 3}}
         )
-        self.assertEqual(extract(dic, ["internal", "value"]), 2)
-        self.assertIsNone(extract(dic, ["internal", "val"]))
-        self.assertEqual(extract(dic, ["internal", "internal", "value"]), 3)
-        self.assertIsNone(extract(dic, ["internal", "internal", "val"]))
+        self.assertEqual(_extract(dic, ["internal", "value"]), 2)
+        self.assertIsNone(_extract(dic, ["internal", "val"]))
+        self.assertEqual(_extract(dic, ["internal", "internal", "value"]), 3)
+        self.assertIsNone(_extract(dic, ["internal", "internal", "val"]))
 
 
 class FieldBuilder:
@@ -59,7 +59,7 @@ class FieldBuilder:
 class TestValidator(unittest.TestCase):
     def test_call(self) -> None:
         setting = {"int": 42, "not_int": "42"}
-        validator = Validator(setting)
+        validator = _Validator(setting)
 
         self.assertEqual(
             validator(
