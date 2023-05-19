@@ -4,7 +4,7 @@ from datetime import date, datetime, time
 from typing import Any, Callable, Optional, Union
 
 from fastconfig.exception import UnexpectedValueError
-from fastconfig.internals.type_checker import TypeChecker
+from fastconfig.internals.type_checker import _TypeChecker
 
 Numeric = Union[int, float]
 
@@ -21,7 +21,7 @@ class ComplexTypes:
 
 class TestTypeChecker(unittest.TestCase):
     def test_call(self) -> None:
-        checker = TypeChecker()
+        checker = _TypeChecker()
         config = ComplexTypes()
         for key, f in config.__dataclass_fields__.items():
             self.assertEqual(
@@ -37,7 +37,7 @@ class TestTypeChecker(unittest.TestCase):
         )
 
     def test_check(self) -> None:
-        checker = TypeChecker()
+        checker = _TypeChecker()
 
         # Any
         self.assertTrue(checker.check("Any", 10, Any))  # type: ignore
@@ -94,7 +94,7 @@ class TestTypeChecker(unittest.TestCase):
         )
 
     def test_check_datetime(self) -> None:
-        checker = TypeChecker()
+        checker = _TypeChecker()
 
         # original
         self.assertTrue(checker.check_datetime(datetime(2020, 1, 1), datetime))

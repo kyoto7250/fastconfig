@@ -1,3 +1,4 @@
+"""this module provides `_FileLoader`."""
 import json
 from typing import Any
 
@@ -6,7 +7,7 @@ import toml
 from fastconfig.exception import InvalidConfigError
 
 
-class FileLoader:
+class _FileLoader:
     def __call__(self, path: str) -> dict[str, Any]:
         if path.endswith(".json"):
             return self.load_json(path)

@@ -26,5 +26,7 @@ jobs:
         run: poetry run ruff check --exit-non-zero-on-fix fastconfig/ tests/
       - name: isort
         run: poetry run isort --check-only fastconfig/ tests/
+      - name: pydocstyle
+        run: poetry run pydocstyle fastconfig/
       - name: pytest
         run: poetry run pytest

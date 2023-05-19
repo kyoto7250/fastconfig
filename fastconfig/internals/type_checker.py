@@ -1,3 +1,4 @@
+"""this module provides _TypeChecker."""
 import datetime
 from types import GenericAlias
 from typing import Any, Type, Union, _SpecialForm, get_args, get_origin
@@ -7,7 +8,7 @@ from fastconfig.exception import UnexpectedValueError
 DATE_TYPES = [datetime.datetime, datetime.date, datetime.time]
 
 
-class TypeChecker:
+class _TypeChecker:
     def __call__(
         self, key: str, value: Any, typeinfo: Union[type, GenericAlias, _SpecialForm]
     ) -> Any:

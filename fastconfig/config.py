@@ -1,3 +1,4 @@
+"""this module provides FastConfig class."""
 import os
 import sys
 from dataclasses import MISSING, asdict, dataclass, field
@@ -5,8 +6,8 @@ from pathlib import Path
 from typing import Any, Mapping, Optional, Type, TypeVar, Union
 
 from fastconfig.exception import InvalidConfigError
-from fastconfig.internals.loader import FileLoader
-from fastconfig.internals.validator import DEFAULT_VALUE, Validator
+from fastconfig.internals.loader import _FileLoader
+from fastconfig.internals.validator import DEFAULT_VALUE, _Validator
 
 _T = TypeVar("_T")
 _Self = TypeVar("_Self", bound="FastConfig")
@@ -14,16 +15,38 @@ _Self = TypeVar("_Self", bound="FastConfig")
 
 @dataclass
 class FastConfig:
+    """this class provides the way to build and update instance from `toml` or `json` format file."""
+
     @classmethod
     def build(
         cls: Type[_Self], path: Union[str, Path], config: Optional[_Self] = None
     ) -> _Self:
+        """
+        Read file from path and create/update instance.
+
+        Args:
+            path: Union[str, Path]
+                a file path to read a config
+            config: Optional[_Self]
+                an instance inheriting from FastConfig (if updating)
+        Returns:
+            _Self: an instance inheriting from FastConfig
+        """
         if config is None:
             return _FastConfigBuilder.build(path, cls)
         else:
             return _FastConfigBuilder.build(path, config)
 
     def to_dict(self, use_key: bool = False) -> dict[str, Any]:
+        """
+        Convert from an instance to dict.
+
+        Args:
+            use_key: bool
+                Whether to convert to dictionary by class instance name
+        Returns:
+            dict[str, Any]
+        """
         if use_key:
             return asdict(self)
 
@@ -59,6 +82,21 @@ if sys.version_info >= (3, 10):
         metadata: Mapping[Any, Any] | None = None,
         kw_only=MISSING,
     ) -> _T:
+        """
+        Return `dataclass::field`.
+
+        wrapper of `dataclass::field` for FastConfig definition.
+        same as `field` except for passing `key` and `separator`.
+
+        Args:
+            key: Optional[str | int]
+                the name of the key you want to read, divided by `separator` when retrieving data
+            separator: str
+                Separator for splitting key values, default is `.`
+
+        Returns:
+            _T
+        """
         options: dict[str, Any] = {
             "default": default,
             "default_factory": default_factory,
@@ -88,6 +126,21 @@ else:
         compare: bool = True,
         metadata: Optional[Mapping[Any, Any]] = None,
     ) -> _T:
+        """
+        Return `dataclass::field`.
+
+        wrapper of `dataclass::field` for FastConfig definition.
+        same as `field` except for passing `key` and `separator`.
+
+        Args:
+            key: Optional[str | int]
+                the name of the key you want to read, divided by `separator` when retrieving data
+            separator: str
+                Separator for splitting key values, default is `.`
+
+        Returns:
+            _T
+        """
         options: dict[str, Any] = {
             "default": default,
             "default_factory": default_factory,
@@ -113,7 +166,7 @@ class _FastConfigBuilder:
         if not os.path.exists(path):
             raise FileNotFoundError(f"{path} is not found")
 
-        loader: FileLoader = FileLoader()
+        loader: _FileLoader = _FileLoader()
         data: dict[str, Any] = loader(path)
         if not isinstance(config, type) and isinstance(config, FastConfig):
             return cls._update(config, data)
@@ -132,7 +185,7 @@ class _FastConfigBuilder:
     ) -> _Self:
         # check metadata and type hint
         args: dict[str, Any] = {}
-        checker: Validator = Validator(setting)
+        checker: _Validator = _Validator(setting)
         for key, f in config.__dataclass_fields__.items():
             value = checker(key, f)
             if not isinstance(value, DEFAULT_VALUE):
@@ -141,7 +194,7 @@ class _FastConfigBuilder:
 
     @classmethod
     def _update(cls, config: _Self, setting: dict[str, Any]) -> _Self:
-        checker: Validator = Validator(setting)
+        checker: _Validator = _Validator(setting)
         for key, f in config.__dataclass_fields__.items():
             value = checker(key, f, build=False)
             if not isinstance(value, DEFAULT_VALUE):
