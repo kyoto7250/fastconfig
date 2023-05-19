@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Any, List, Optional, Union
 
-from fastconfig.config import FastConfig, fc_field
+from fastconfig.config import FastConfig, _FastConfigBuilder, fc_field
 from fastconfig.exception import InvalidConfigError
 
 
@@ -41,18 +41,33 @@ class ComplexTypes(FastConfig):
 
 
 class TestFastConfig(unittest.TestCase):
-    def test_asdict(self) -> None:
+    def test_to_dict(self) -> None:
         config = BasicTypes(
             a={"first": "1", "second": "2"},
             b=True,
             c=42,
             d="str",
             e=[1, 2, 3],
-            f=0,
+            f=0.0,
             g=date(1979, 5, 27),
         )
         self.assertEqual(
-            config.to_dict(),
+            config.to_dict(use_key=False),
+            {
+                "table": {"first": "1", "second": "2"},
+                "flag": True,
+                "section": {
+                    "int": 42,
+                    "list": {"value": [1, 2, 3]},
+                    "date": {"date": date(1979, 5, 27)},
+                },
+                "str": "str",
+                "f": 0.0,
+            },
+        )
+
+        self.assertEqual(
+            config.to_dict(use_key=True),
             {
                 "a": {"first": "1", "second": "2"},
                 "b": True,
@@ -62,6 +77,10 @@ class TestFastConfig(unittest.TestCase):
                 "f": 0.0,
                 "g": date(1979, 5, 27),
             },
+        )
+
+        self.assertEqual(
+            _FastConfigBuilder._make(BasicTypes, config.to_dict(use_key=False)), config
         )
 
     def test_toml_build(self) -> None:
