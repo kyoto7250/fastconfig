@@ -1,6 +1,12 @@
+[![](https://img.shields.io/pypi/pyversions/fastconfig)](https://pypi.org/project/fastconfig/)
+[![](https://img.shields.io/pypi/v/fastconfig)](https://pypi.org/project/fastconfig/)
+[![](https://img.shields.io/pypi/l/fastconfig)](https://github.com/kyoto7250/fastconfig/blob/main/LICENSE)
+![](https://img.shields.io/github/actions/workflow/status/kyoto7250/fastconfig/lint_and_test.yml)
+[![](https://img.shields.io/website?down_message=offline&up_color=blue&up_message=online&url=https%3A%2F%2Fkyoto7250.github.io%2Ffastconfig%2F)](https://kyoto7250.github.io/fastconfig/)
+
 # fastconfig
-A lightweight way to find the project root and load config in python3.
-current support is [`3.9`, `3.10`, `3.11`].
+A lightweight way to find the project root and load config in `python3`.
+current support is `3.9`, `3.10`, `3.11`.
 
 This library provides two functionalities:
 
