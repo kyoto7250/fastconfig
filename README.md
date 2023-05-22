@@ -47,22 +47,21 @@ numeric = 24
 
 ```python
 # main.py
-import fastconfig
-from fastconfig.config import FastConfig, fc_field
-from fastconfig.exception import FastConfigError
-from dataclasses import field, dataclass
+from fastconfig import FastConfig, fc_field, FastConfigError, search
+from dataclasses import dataclass
 
 
 @dataclass
 class Config(FastConfig):
     result: int = fc_field(key="section.numeric", default=-1)
-    # If metadata does not exist, it is searched by variable name
+    # If metadata does not exist, it is searched by variable name.
+    # If metadata does not exist and the variable not found in the target file, raise FastConfigError (MissingRequiredElementError)
     setting_path: str = fc_field(default="default")
-    # Type checking is done based on the type of dataclass. Type checking is recursive.
+    # Type-checking is done based on the type of dataclass. Type-checking is recursive.
     dic: dict[str, int] = fc_field(key="section", default_factory=dict)
 
 
-if path := fastconfig.search("example.json"):
+if path := search("example.json"):
     try:
         # build instance
         config = Config.build(path)
@@ -74,7 +73,7 @@ if path := fastconfig.search("example.json"):
 else:
     config = Config()
 
-if other_path := fastconfig.search("other.toml"):
+if other_path := search("other.toml"):
     # can update config
     config = Config.build(other_path, config)
     assert config == Config(result=24, setting_path="setting_path", dic={"numeric": 24})

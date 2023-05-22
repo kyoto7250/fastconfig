@@ -1,6 +1,6 @@
 import unittest
 
-from fastconfig.exception import InvalidConfigError
+from fastconfig import InvalidConfigError
 from fastconfig.internals.loader import _FileLoader
 
 

@@ -74,7 +74,3 @@ class TestSearch(unittest.TestCase):
 
         # None
         self.assertIsNotNone(find_project_root())
-
-
-if __name__ == "__main__":
-    unittest.main()

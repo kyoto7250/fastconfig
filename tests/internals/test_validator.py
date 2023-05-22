@@ -3,7 +3,7 @@ import unittest
 from dataclasses import MISSING, Field
 from typing import Any, Optional
 
-from fastconfig.exception import MissingRequiredElementError, UnexpectedValueError
+from fastconfig import MissingRequiredElementError, UnexpectedValueError
 from fastconfig.internals.validator import DEFAULT_VALUE, _extract, _Validator
 
 
