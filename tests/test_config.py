@@ -3,8 +3,8 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Any, List, Optional, Union
 
-from fastconfig.config import FastConfig, _FastConfigBuilder, fc_field
-from fastconfig.exception import InvalidConfigError
+from fastconfig import FastConfig, InvalidConfigError, fc_field
+from fastconfig.config import _FastConfigBuilder
 
 
 @dataclass

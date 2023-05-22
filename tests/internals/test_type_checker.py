@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from datetime import date, datetime, time
 from typing import Any, Callable, Optional, Union
 
-from fastconfig.exception import UnexpectedValueError
+from fastconfig import UnexpectedValueError
 from fastconfig.internals.type_checker import _TypeChecker
 
 Numeric = Union[int, float]

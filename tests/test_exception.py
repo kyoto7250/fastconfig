@@ -1,6 +1,6 @@
 import unittest
 
-from fastconfig.exception import (
+from fastconfig import (
     FastConfigError,
     InvalidConfigError,
     MissingRequiredElementError,
